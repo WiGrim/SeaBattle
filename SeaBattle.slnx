@@ -3,6 +3,6 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="SeaBattleCore/SeaBattleCore.vcxproj" />
-  <Project Path="SeaBattleTests/SeaBattleTests.vcxproj" />
+  <Project Path="SeaBattleCore/SeaBattleCore.vcxproj" Id="1e89237a-535b-4cdc-bd9d-cf66350e7686" />
+  <Project Path="SeaBattleTests/SeaBattleTests.vcxproj" Id="2b1df108-3f06-4a3e-9e02-4aeda14ba950" />
 </Solution>
