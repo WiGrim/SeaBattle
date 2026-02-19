@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "gtest/gtest.h"
 #include "Board.h"
+#include "CellState.h"
 
 TEST(BoardTest, BoardCreation)
 {
