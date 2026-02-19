@@ -6,3 +6,9 @@ TEST(BoardTest, BoardCreation)
 {
     Board board(10);
 }
+
+TEST(BoardTest, BoardSize)
+{
+    Board board(10);
+    EXPECT_EQ(board.getSize(), 10);
+}
