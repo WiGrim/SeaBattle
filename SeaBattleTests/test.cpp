@@ -12,3 +12,9 @@ TEST(BoardTest, BoardSize)
     Board board(10);
     EXPECT_EQ(board.getSize(), 10);
 }
+
+TEST(BoardTest, CellInitiallyEmpty)
+{
+    Board board(10);
+    EXPECT_EQ(board.getCell(0, 0), CellState::Empty);
+}
