@@ -7,6 +7,8 @@ class Board
 public:
     Board(int size);
 
+    void placeShip(int x, int y);
+
     CellState getCell(int x, int y) const;
     int getSize() const;
 

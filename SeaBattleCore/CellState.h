@@ -1,6 +1,7 @@
 #pragma once
 enum class CellState
 {
-    Empty
-    // Ship, Hit, Miss
+    Empty,
+    Ship
+    //Hit, Miss
 };

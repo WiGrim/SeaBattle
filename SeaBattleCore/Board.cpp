@@ -10,3 +10,8 @@ int Board::getSize() const {
 CellState Board::getCell(int x, int y) const {
     return grid[y][x];
 }
+
+void Board::placeShip(int x, int y)
+{
+    grid[x][y] = CellState::Ship;
+}
