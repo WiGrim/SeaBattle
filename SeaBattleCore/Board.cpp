@@ -13,5 +13,8 @@ CellState Board::getCell(int x, int y) const {
 
 void Board::placeShip(int x, int y)
 {
+    if (x < 0 || y < 0 || x >= size || y >= size)
+        throw std::out_of_range("Coordinates are outside the board");
+
     grid[x][y] = CellState::Ship;
 }
