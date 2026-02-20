@@ -45,3 +45,13 @@ TEST(BoardTest, ShootHitsShip)
 
     EXPECT_EQ(board.getCell(0, 0), CellState::Hit);
 }
+
+TEST(BoardTest, ShootNotHitsShip)
+{
+    Board board(10);
+    board.placeShip(0, 0);
+
+    board.shoot(0, 1);
+
+    EXPECT_EQ(board.getCell(0, 1), CellState::Miss);
+}
