@@ -162,3 +162,37 @@ TEST(GameTest, GameOverWhenAllShipsDestroyed)
     game.shootAtOpponent(1, 1);
     EXPECT_TRUE(game.opponent->board.isGameOver());
 }
+
+TEST(PlayerTest, AddSingleShip)
+{
+    Player p("Alice", 5);
+    EXPECT_NO_THROW(p.addShip(0, 0, 2, Orientation::Horizontal));
+    EXPECT_EQ(p.board.getCell(0, 0), CellState::Ship);
+    EXPECT_EQ(p.board.getCell(1, 0), CellState::Ship);
+}
+
+TEST(PlayerTest, AddShipOutOfBounds)
+{
+    Player p("Alice", 5);
+    EXPECT_THROW(p.addShip(4, 0, 2, Orientation::Horizontal), ShipPlaceError);
+    EXPECT_THROW(p.addShip(0, 4, 2, Orientation::Vertical), ShipPlaceError);
+}
+
+TEST(PlayerTest, AddShipOverlapping)
+{
+    Player p("Alice", 5);
+    p.addShip(0, 0, 2, Orientation::Horizontal);
+    EXPECT_THROW(p.addShip(1, 0, 3, Orientation::Horizontal), ShipPlaceError);
+}
+
+TEST(PlayerTest, AddMultipleShips)
+{
+    Player p("Alice", 5);
+    EXPECT_NO_THROW(p.addShip(0, 0, 2, Orientation::Horizontal));
+    EXPECT_NO_THROW(p.addShip(2, 0, 2, Orientation::Vertical));
+
+    EXPECT_EQ(p.board.getCell(0, 0), CellState::Ship);
+    EXPECT_EQ(p.board.getCell(1, 0), CellState::Ship);
+    EXPECT_EQ(p.board.getCell(2, 0), CellState::Ship);
+    EXPECT_EQ(p.board.getCell(2, 1), CellState::Ship);
+}
