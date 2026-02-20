@@ -55,3 +55,18 @@ TEST(BoardTest, ShootNotHitsShip)
 
     EXPECT_EQ(board.getCell(0, 1), CellState::Miss);
 }
+
+TEST(BoardTest, GameOverWhenAllShipsGone)
+{
+    Board board(2);
+    board.placeShip(0, 0);
+    board.shoot(0, 0);
+    EXPECT_TRUE(board.isGameOver());
+}
+
+TEST(BoardTest, CannotPlaceShipNearToOther)
+{
+    Board board(2);
+    board.placeShip(0, 0);
+    EXPECT_THROW(board.placeShip(0, 0), std::ship_place_error);
+}
