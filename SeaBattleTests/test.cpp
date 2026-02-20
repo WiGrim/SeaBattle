@@ -35,3 +35,13 @@ TEST(BoardTest, PlaceShipOutOfBounds)
 
     EXPECT_THROW(board.placeShip(20, 20), std::out_of_range);
 }
+
+TEST(BoardTest, ShootHitsShip)
+{
+    Board board(10);
+    board.placeShip(0, 0);
+
+    board.shoot(0, 0);
+
+    EXPECT_EQ(board.getCell(0, 0), CellState::Hit);
+}
