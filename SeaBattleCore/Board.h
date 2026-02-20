@@ -10,7 +10,7 @@ public:
     Board(int size);
 
     void placeShip(int x, int y);
-    void shoot(int x, int y);
+    bool shoot(int x, int y);
     void print(std::ostream& out, bool showShips) const;
 
     void validateCoordinates(int x, int y) const;

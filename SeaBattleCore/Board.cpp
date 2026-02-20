@@ -38,17 +38,19 @@ void Board::placeShip(int x, int y)
     grid[y][x] = CellState::Ship;
 }
 
-void Board::shoot(int x, int y)
+bool Board::shoot(int x, int y)
 {
     validateCoordinates(x, y);
 
     if (grid[y][x] == CellState::Ship || grid[y][x] == CellState::Hit)
     {
         grid[y][x] = CellState::Hit;
+        return true;
     }
     else
     {
         grid[y][x] = CellState::Miss;
+        return false;
     }
 }
 

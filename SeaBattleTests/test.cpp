@@ -2,6 +2,7 @@
 #include "Board.h"
 #include "CellState.h"
 #include "ShipPlaceError.h"
+#include "Game.h"
 
 TEST(BoardTest, BoardCreation)
 {
@@ -129,9 +130,8 @@ TEST(GameTest, SwitchTurnAfterMiss)
 
     game.currentPlayer = &game.player1;
     game.opponent = &game.player2;
-    game.currentPlayer->board.shoot(0, 1);
-
-    game.switchTurn();
+    
+    game.shootAtOpponent(0, 1);
     EXPECT_EQ(game.currentPlayer->name, "Bob");
 }
 
@@ -145,8 +145,7 @@ TEST(GameTest, HitDoesNotSwitchTurn)
     game.currentPlayer = &game.player1;
     game.opponent = &game.player2;
 
-    game.currentPlayer->board.shoot(1, 1);
-
+    game.shootAtOpponent(1, 1);
     EXPECT_EQ(game.currentPlayer->name, "Alice");
 }
 
@@ -157,7 +156,9 @@ TEST(GameTest, GameOverWhenAllShipsDestroyed)
     game.player1.board.placeShip(0, 0);
     game.player2.board.placeShip(1, 1);
 
-    game.player1.board.shoot(1, 1);
+    game.currentPlayer = &game.player1;
+    game.opponent = &game.player2;
 
+    game.shootAtOpponent(1, 1);
     EXPECT_TRUE(game.opponent->board.isGameOver());
 }
