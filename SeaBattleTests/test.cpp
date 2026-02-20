@@ -2,6 +2,7 @@
 #include "gtest/gtest.h"
 #include "Board.h"
 #include "CellState.h"
+#include "ShipPlaceError.h"
 
 TEST(BoardTest, BoardCreation)
 {
@@ -68,5 +69,5 @@ TEST(BoardTest, CannotPlaceShipNearToOther)
 {
     Board board(2);
     board.placeShip(0, 0);
-    EXPECT_THROW(board.placeShip(0, 0), std::ship_place_error);
+    EXPECT_THROW(board.placeShip(0, 0), ShipPlaceError);
 }

@@ -143,6 +143,7 @@
     <ClInclude Include="CellState.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="ShipPlaceError.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Board.cpp" />
