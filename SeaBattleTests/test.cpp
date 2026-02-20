@@ -1,5 +1,4 @@
 #include "pch.h"
-#include "gtest/gtest.h"
 #include "Board.h"
 #include "CellState.h"
 #include "ShipPlaceError.h"
@@ -70,4 +69,53 @@ TEST(BoardTest, CannotPlaceShipNearToOther)
     Board board(2);
     board.placeShip(0, 0);
     EXPECT_THROW(board.placeShip(0, 0), ShipPlaceError);
+}
+
+TEST(BoardTest, PrintEmptyBoard)
+{
+    Board board(2);
+
+    std::ostringstream out;
+    board.print(out, true);
+
+    std::string expected =
+        "  0 1 \n"
+        "0 - - \n"
+        "1 - - \n";
+
+    EXPECT_EQ(out.str(), expected);
+}
+
+TEST(BoardTest, PrintBoardWithShipAndHit)
+{
+    Board board(2);
+    board.placeShip(0, 0);
+    board.shoot(0, 0);
+    board.shoot(1, 0);
+
+    std::ostringstream out;
+    board.print(out, true);
+
+    std::string expected =
+        "  0 1 \n"
+        "0 X / \n"
+        "1 - - \n";
+
+    EXPECT_EQ(out.str(), expected);
+}
+
+TEST(BoardTest, PrintBoardHideShips)
+{
+    Board board(2);
+    board.placeShip(0, 0);
+
+    std::ostringstream out;
+    board.print(out, false);
+
+    std::string expected =
+        "  0 1 \n"
+        "0 - - \n"
+        "1 - - \n";
+
+    EXPECT_EQ(out.str(), expected);
 }
