@@ -2,6 +2,7 @@
 enum class CellState
 {
     Empty,
-    Ship
-    //Hit, Miss
+    Ship,
+    Hit 
+    //Miss
 };
