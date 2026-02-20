@@ -19,3 +19,12 @@ TEST(BoardTest, CellInitiallyEmpty)
     Board board(10);
     EXPECT_EQ(board.getCell(0, 0), CellState::Empty);
 }
+
+TEST(BoardTest, PlaceShipOnCell)
+{
+    Board board(10);
+
+    board.placeShip(0, 0);
+
+    EXPECT_EQ(board.getCell(0, 0), CellState::Ship);
+}
