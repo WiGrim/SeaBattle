@@ -28,3 +28,10 @@ TEST(BoardTest, PlaceShipOnCell)
 
     EXPECT_EQ(board.getCell(0, 0), CellState::Ship);
 }
+
+TEST(BoardTest, PlaceShipOutOfBounds)
+{
+    Board board(10);
+
+    EXPECT_THROW(board.placeShip(20, 20), std::out_of_range);
+}
