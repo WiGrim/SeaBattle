@@ -119,3 +119,45 @@ TEST(BoardTest, PrintBoardHideShips)
 
     EXPECT_EQ(out.str(), expected);
 }
+
+TEST(GameTest, SwitchTurnAfterMiss)
+{
+    Game game("Alice", "Bob", 2);
+
+    game.player1.board.placeShip(0, 0);
+    game.player2.board.placeShip(1, 1);
+
+    game.currentPlayer = &game.player1;
+    game.opponent = &game.player2;
+    game.currentPlayer->board.shoot(0, 1);
+
+    game.switchTurn();
+    EXPECT_EQ(game.currentPlayer->name, "Bob");
+}
+
+TEST(GameTest, HitDoesNotSwitchTurn)
+{
+    Game game("Alice", "Bob", 2);
+
+    game.player1.board.placeShip(0, 0);
+    game.player2.board.placeShip(1, 1);
+
+    game.currentPlayer = &game.player1;
+    game.opponent = &game.player2;
+
+    game.currentPlayer->board.shoot(1, 1);
+
+    EXPECT_EQ(game.currentPlayer->name, "Alice");
+}
+
+TEST(GameTest, GameOverWhenAllShipsDestroyed)
+{
+    Game game("Alice", "Bob", 2);
+
+    game.player1.board.placeShip(0, 0);
+    game.player2.board.placeShip(1, 1);
+
+    game.player1.board.shoot(1, 1);
+
+    EXPECT_TRUE(game.opponent->board.isGameOver());
+}
