@@ -62,3 +62,36 @@ bool Board::isGameOver() const {
     }
     return true;
 }
+
+void Board::print(std::ostream& out, bool showShips) const
+{
+    out << "  ";
+    for (int x = 0; x < size; x++)
+        out << x << " ";
+    out << "\n";
+
+    for (int y = 0; y < size; y++) {
+        out << y << " ";
+        for (int x = 0; x < size; x++) {
+            char c = '-';
+
+            switch (grid[y][x]) {
+            case CellState::Empty:
+                c = '-';
+                break;
+            case CellState::Ship:
+                c = showShips ? '0' : '-';
+                break;
+            case CellState::Hit:
+                c = 'X';
+                break;
+            case CellState::Miss:
+                c = '/';
+                break;
+            }
+
+            out << c << " ";
+        }
+        out << "\n";
+    }
+}
