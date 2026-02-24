@@ -12,7 +12,29 @@ Game::Game(const std::string& name1, const std::string& name2, int boardSize)
 void Game::shootAtOpponent(int x, int y)
 {
     bool hit = opponent->board.shoot(x, y);
-    if (!hit) {
+    if (hit)
+    {
+        for (auto& ship : opponent->getShips())
+        {
+            ship.registerHit(x, y);
+        }
+        if (isGameOver()) {
+            winnerName = currentPlayer->name;
+        }
+    }
+    else
+    {
         std::swap(currentPlayer, opponent);
     }
+}
+
+void Game::start() {
+    if (player1.getShips().empty() || player2.getShips().empty())
+        throw std::logic_error("Both players must place ships before starting");
+    currentPlayer = &player1;
+    opponent = &player2;
+}
+
+bool Game::isGameOver() const {
+    return player1.allShipsDestroyed() || player2.allShipsDestroyed();
 }

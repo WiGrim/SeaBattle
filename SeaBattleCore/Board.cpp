@@ -29,7 +29,10 @@ bool Board::shoot(int x, int y)
 {
     validateCoordinates(x, y);
 
-    if (grid[y][x] == CellState::Ship || grid[y][x] == CellState::Hit)
+    if (grid[y][x] == CellState::Hit || grid[y][x] == CellState::Miss)
+        throw std::logic_error("Cell has already been shot");
+
+    if (grid[y][x] == CellState::Ship)
     {
         grid[y][x] = CellState::Hit;
         return true;
@@ -41,7 +44,8 @@ bool Board::shoot(int x, int y)
     }
 }
 
-bool Board::isGameOver() const {
+//Логика перемещена в Game
+/*bool Board::isGameOver() const {
     for (int y = 0; y < size; y++) {
         for (int x = 0; x < size; x++) {
             if (grid[y][x] == CellState::Ship) {
@@ -50,7 +54,7 @@ bool Board::isGameOver() const {
         }
     }
     return true;
-}
+}*/
 
 void Board::print(std::ostream& out, bool showShips) const
 {

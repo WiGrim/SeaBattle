@@ -11,9 +11,14 @@ public:
 
     std::vector<std::pair<int, int>> getCoordinates() const;
 
+    bool registerHit(int x, int y);
+    bool isDestroyed() const;
+
 private:
     int startX;
     int startY;
     int length;
     Orientation orientation;
+
+    std::vector<bool> hits;
 };

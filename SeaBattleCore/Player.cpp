@@ -6,6 +6,9 @@ Player::Player(const std::string& n, int boardSize) : name(n), board(boardSize) 
 
 bool Player::addShip(int x, int y, int length, Orientation orientation)
 {
+    if (ships.size() >= maxShips)
+        throw ShipPlaceError("Cannot exceed ship pool");
+
     Ship newShip(x, y, length, orientation);
 
     for (auto [sx, sy] : newShip.getCoordinates())
@@ -38,5 +41,13 @@ bool Player::addShip(int x, int y, int length, Orientation orientation)
         board.placeShip(sx, sy);
 
     ships.push_back(newShip);
+    return true;
+}
+
+bool Player::allShipsDestroyed() const {
+    for (const auto& ship : ships) {
+        if (!ship.isDestroyed())
+            return false;
+    }
     return true;
 }
