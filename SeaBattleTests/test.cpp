@@ -65,12 +65,13 @@ TEST(BoardTest, GameOverWhenAllShipsGone)
     EXPECT_TRUE(board.isGameOver());
 }
 
-TEST(BoardTest, CannotPlaceShipNearToOther)
+//Логика проверки перенесена в Player::addShip()
+/*TEST(BoardTest, CannotPlaceShipNearToOther)
 {
     Board board(2);
     board.placeShip(0, 0);
     EXPECT_THROW(board.placeShip(0, 0), ShipPlaceError);
-}
+}*/
 
 TEST(BoardTest, PrintEmptyBoard)
 {
@@ -189,10 +190,10 @@ TEST(PlayerTest, AddMultipleShips)
 {
     Player p("Alice", 5);
     EXPECT_NO_THROW(p.addShip(0, 0, 2, Orientation::Horizontal));
-    EXPECT_NO_THROW(p.addShip(2, 0, 2, Orientation::Vertical));
+    EXPECT_NO_THROW(p.addShip(3, 0, 2, Orientation::Vertical));
 
     EXPECT_EQ(p.board.getCell(0, 0), CellState::Ship);
     EXPECT_EQ(p.board.getCell(1, 0), CellState::Ship);
-    EXPECT_EQ(p.board.getCell(2, 0), CellState::Ship);
-    EXPECT_EQ(p.board.getCell(2, 1), CellState::Ship);
+    EXPECT_EQ(p.board.getCell(3, 0), CellState::Ship);
+    EXPECT_EQ(p.board.getCell(3, 1), CellState::Ship);
 }

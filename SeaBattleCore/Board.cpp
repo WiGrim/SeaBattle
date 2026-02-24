@@ -22,19 +22,6 @@ CellState Board::getCell(int x, int y) const {
 void Board::placeShip(int x, int y)
 {
     validateCoordinates(x, y);
-
-    for (int dy = -1; dy <= 1; dy++) {
-        for (int dx = -1; dx <= 1; dx++) {
-            int nx = x + dx;
-            int ny = y + dy;
-            if (nx >= 0 && ny >= 0 && nx < size && ny < size) {
-                if (grid[ny][nx] == CellState::Ship) {
-                    throw ShipPlaceError("Cannot place ship near another ship");
-                }
-            }
-        }
-    }
-
     grid[y][x] = CellState::Ship;
 }
 
