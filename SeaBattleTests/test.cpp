@@ -323,3 +323,165 @@ TEST(PlayerTest, MustPlaceAllShipsBeforeStarting)
 
     EXPECT_NO_THROW(game.start());
 }
+
+TEST(UITest, HorizontalDisplayShipsAndHits)
+{
+    Board b1(3);
+    Board b2(3);
+
+    b1.placeShip(0, 0);
+    b1.placeShip(2, 1);
+    b1.shoot(0, 0);
+    b1.shoot(1, 1);
+
+    b2.placeShip(1, 0);
+    b2.placeShip(0, 2);
+    b2.shoot(1, 0);
+    b2.shoot(2, 2);
+
+    std::stringstream ss;
+    printBoardsSideBySide(b1, b2, true, false, ss);
+
+    std::string output = ss.str();
+
+    EXPECT_NE(output.find("X - -"), std::string::npos);
+    EXPECT_NE(output.find("- / 0"), std::string::npos);
+    EXPECT_NE(output.find("- - -"), std::string::npos);
+
+    EXPECT_EQ(output.find("0", output.find("\t")), std::string::npos);
+}
+
+TEST(UITest, BothBoardsHidden)
+{
+    Board b1(2);
+    Board b2(2);
+
+    b1.placeShip(0, 0);
+    b1.shoot(0, 0);
+
+    b2.placeShip(1, 1);
+    b2.shoot(1, 1);
+
+    std::stringstream ss;
+    printBoardsSideBySide(b1, b2, false, false, ss);
+
+    std::string output = ss.str();
+
+    EXPECT_EQ(output.find("0"), std::string::npos);
+    EXPECT_NE(output.find("X"), std::string::npos);
+}
+
+TEST(UITest, InputPlayerNames) {
+    std::istringstream in("Alice\nBob\n");
+    std::ostringstream out;
+
+    std::string name1, name2;
+    std::getline(in, name1);
+    std::getline(in, name2);
+
+    EXPECT_EQ(name1, "Alice");
+    EXPECT_EQ(name2, "Bob");
+}
+
+TEST(UITest, ShowNextPlayerBoardOnSwitchScreen) {
+    Player p1("Alice", 5);
+    Player p2("Bob", 5);
+
+    p1.addShip(0, 0, 2, Orientation::Horizontal);
+    p2.addShip(1, 1, 2, Orientation::Horizontal);
+
+    std::ostringstream out;
+    printSwitchScreen(p2, out);
+
+    std::string output = out.str();
+    EXPECT_NE(output.find("Отвернитесь и передайте ход"), std::string::npos);
+    EXPECT_NE(output.find("0 1 2 3 4"), std::string::npos);
+    EXPECT_NE(output.find("0 0 - - -"), std::string::npos);
+}
+
+TEST(UITest, UndoLastShipPlacement) {
+    Player p("Alice", 5, { 2,1 });
+    EXPECT_NO_THROW(p.addShip(0, 0, 2, Orientation::Horizontal));
+    auto shipsBefore = p.getShips().size();
+    p.getShips().pop_back();
+    EXPECT_EQ(p.getShips().size(), shipsBefore - 1);
+}
+
+TEST(UITest, ResetAllShips) {
+    Player p("Alice", 5, { 2,1 });
+    EXPECT_NO_THROW(p.addShip(0, 0, 2, Orientation::Horizontal));
+    EXPECT_NO_THROW(p.addShip(2, 2, 1, Orientation::Horizontal));
+    p.getShips().clear();
+    for (auto& entry : p.getShipPool()) entry.placed = 0;
+    EXPECT_FALSE(p.allShipsPlaced());
+}
+
+TEST(UITest, BothFieldsHiddenAtStartOfTurn) {
+    Game game("Alice", "Bob", 5);
+    game.player1.addShip(0, 0, 2, Orientation::Horizontal);
+    game.player2.addShip(1, 1, 2, Orientation::Horizontal);
+    game.start();
+
+    std::ostringstream out;
+    printBoardsSideBySide(game.currentPlayer->board, game.opponent->board, false, false, out);
+    std::string output = out.str();
+    EXPECT_EQ(output.find("0"), std::string::npos);
+    EXPECT_EQ(output.find("1"), std::string::npos);
+}
+
+TEST(UITest, HitDoesNotSwitchPlayer) {
+    Game game("Alice", "Bob", 3);
+    game.player1.addShip(0, 0, 1, Orientation::Horizontal);
+    game.player2.addShip(1, 1, 1, Orientation::Horizontal);
+    game.start();
+
+    game.shootAtOpponent(1, 1);
+    EXPECT_EQ(game.currentPlayer->name, "Alice");
+}
+
+TEST(UITest, MissSwitchesPlayer) {
+    Game game("Alice", "Bob", 3);
+    game.player1.addShip(0, 0, 1, Orientation::Horizontal);
+    game.player2.addShip(1, 1, 1, Orientation::Horizontal);
+    game.start();
+
+    game.shootAtOpponent(0, 2);
+    EXPECT_EQ(game.currentPlayer->name, "Bob");
+}
+
+TEST(UITest, ShowNextPlayerFieldBeforeTurn) {
+    Game game("Alice", "Bob", 3);
+    game.player1.addShip(0, 0, 1, Orientation::Horizontal);
+    game.player2.addShip(1, 1, 1, Orientation::Horizontal);
+    game.start();
+
+    std::ostringstream out;
+    printSwitchScreen(game.currentPlayer, out);
+
+    std::string output = out.str();
+    EXPECT_NE(output.find("Отвернитесь и передайте ход"), std::string::npos);
+    EXPECT_NE(output.find("0"), std::string::npos);
+}
+
+TEST(UITest, ShotMarksHitAndMissCorrectly) {
+    Player p1("Alice", 3);
+    Player p2("Bob", 3);
+
+    p2.addShip(1, 1, 1, Orientation::Horizontal);
+    p1.board.shoot(1, 1);
+    p1.board.shoot(0, 0);
+
+    EXPECT_EQ(p1.board.getCell(1, 1), CellState::Miss);
+    EXPECT_EQ(p1.board.getCell(0, 0), CellState::Miss);
+}
+
+TEST(UITest, GameOverScreenShowsWinner) {
+    Game game("Alice", "Bob", 2);
+    game.player1.addShip(0, 0, 1, Orientation::Horizontal);
+    game.player2.addShip(1, 1, 1, Orientation::Horizontal);
+    game.start();
+
+    game.shootAtOpponent(1, 1);
+    EXPECT_TRUE(game.isGameOver());
+    EXPECT_EQ(game.getWinnerName(), "Alice");
+}
