@@ -2,12 +2,62 @@
 #include "Player.h"
 #include "ShipPlaceError.h"
 
-Player::Player(const std::string& n, int boardSize) : name(n), board(boardSize) {}
+Player::Player(const std::string& n, int boardSize)
+    : name(n), board(boardSize)
+{
+    shipPool = {
+        {4, 1, 0},
+        {3, 2, 0},
+        {2, 3, 0},
+        {1, 4, 0}
+    };
+}
+
+Player::Player(const std::string& n, int boardSize, std::initializer_list<int> shipLengths)
+    : name(n), board(boardSize)
+{
+    for (int length : shipLengths)
+    {
+        if (length <= 0)
+            throw std::invalid_argument("Ship length must be positive");
+        bool found = false;
+
+        for (auto& entry : shipPool)
+        {
+            if (entry.length == length)
+            {
+                entry.count++;
+                found = true;
+                break;
+            }
+        }
+
+        if (!found)
+        {
+            shipPool.push_back({ length, 1, 0 });
+        }
+    }
+}
 
 bool Player::addShip(int x, int y, int length, Orientation orientation)
 {
-    if (ships.size() >= maxShips)
-        throw ShipPlaceError("Cannot exceed ship pool");
+    bool found = false;
+
+    for (auto& entry : shipPool)
+    {
+        if (entry.length == length)
+        {
+            found = true;
+
+            if (entry.placed >= entry.count)
+                throw ShipPlaceError("Ship limit exceeded");
+
+            break;
+        }
+    }
+
+    if (!found)
+        throw ShipPlaceError("Invalid ship length");
 
     Ship newShip(x, y, length, orientation);
 
@@ -41,12 +91,32 @@ bool Player::addShip(int x, int y, int length, Orientation orientation)
         board.placeShip(sx, sy);
 
     ships.push_back(newShip);
+
+    for (auto& entry : shipPool)
+    {
+        if (entry.length == length)
+        {
+            entry.placed++;
+            break;
+        }
+    }
+
     return true;
 }
 
 bool Player::allShipsDestroyed() const {
     for (const auto& ship : ships) {
         if (!ship.isDestroyed())
+            return false;
+    }
+    return true;
+}
+
+bool Player::allShipsPlaced() const
+{
+    for (const auto& entry : shipPool)
+    {
+        if (entry.placed != entry.count)
             return false;
     }
     return true;

@@ -29,7 +29,7 @@ void Game::shootAtOpponent(int x, int y)
 }
 
 void Game::start() {
-    if (player1.getShips().empty() || player2.getShips().empty())
+    if (!player1.allShipsPlaced() || !player2.allShipsPlaced())
         throw std::logic_error("Both players must place ships before starting");
     currentPlayer = &player1;
     opponent = &player2;

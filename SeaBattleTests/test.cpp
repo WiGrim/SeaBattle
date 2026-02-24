@@ -287,11 +287,11 @@ TEST(PlayerTest, CorrectShipPoolInitialization)
 {
     Player p("Alice", 10, { 4, 3, 2, 1, 1 }); 
     auto pool = p.getShipPool();
-    EXPECT_EQ(pool.size(), 5);
+    EXPECT_EQ(pool.size(), 4);
     EXPECT_EQ(pool[0].length, 4);
     EXPECT_EQ(pool[0].count, 1);
-    EXPECT_EQ(pool[4].length, 1);
-    EXPECT_EQ(pool[4].count, 2);
+    EXPECT_EQ(pool[3].length, 1);
+    EXPECT_EQ(pool[3].count, 2);
 }
 
 TEST(PlayerTest, CannotAddMoreShipsThanPool)
@@ -307,15 +307,19 @@ TEST(PlayerTest, CannotAddMoreShipsThanPool)
 
 TEST(PlayerTest, MustPlaceAllShipsBeforeStarting)
 {
-    Player p("Alice", 10, { 2,1 });
     Game game("Alice", "Bob", 10);
 
-    game.player1 = p;
+    game.player1 = Player("Alice", 10, { 2,1 });
+    game.player2 = Player("Bob", 10, { 2,1 });
+
     EXPECT_THROW(game.start(), std::logic_error);
 
-    p.addShip(0, 0, 2, Orientation::Horizontal);
+    game.player1.addShip(0, 0, 2, Orientation::Horizontal);
     EXPECT_THROW(game.start(), std::logic_error);
 
-    p.addShip(0, 2, 1, Orientation::Horizontal);
+    game.player1.addShip(0, 2, 1, Orientation::Horizontal);
+    game.player2.addShip(5, 5, 2, Orientation::Horizontal);
+    game.player2.addShip(5, 7, 1, Orientation::Horizontal);
+
     EXPECT_NO_THROW(game.start());
 }
