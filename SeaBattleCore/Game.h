@@ -11,7 +11,7 @@ public:
 
     Game(const std::string& name1, const std::string& name2, int boardSize);
 
-    void shootAtOpponent(int x, int y);
+    void shootAtOpponent(int x, int y, std::ostream& out);
 
     void start();
     bool isGameOver() const;

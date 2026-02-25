@@ -9,11 +9,12 @@ Game::Game(const std::string& name1, const std::string& name2, int boardSize)
 {
 }
 
-void Game::shootAtOpponent(int x, int y)
+void Game::shootAtOpponent(int x, int y, std::ostream& out = std::cout)
 {
     bool hit = opponent->board.shoot(x, y);
     if (hit)
     {
+        out << "Hit at (" << x << ", " << y << ")!\n";
         for (auto& ship : opponent->getShips())
         {
             if (ship.registerHit(x, y))
@@ -25,6 +26,7 @@ void Game::shootAtOpponent(int x, int y)
     }
     else
     {
+        out << "Miss at (" << x << ", " << y << ").\n";
         std::swap(currentPlayer, opponent);
     }
 }

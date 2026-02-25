@@ -23,6 +23,9 @@ public:
 
     bool allShipsPlaced() const;
 
+    bool undoLastShipPlacement();
+    void resetAllShips();
+
     std::vector<Ship>& getShips() {
         return ships;
     }

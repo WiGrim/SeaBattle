@@ -17,7 +17,7 @@ public:
     CellState getCell(int x, int y) const;
     int getSize() const;
     //bool isGameOver() const;
-
+    void setCell(int x, int y, CellState state);
 private:
     int size;
     std::vector<std::vector<CellState>> grid;

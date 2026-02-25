@@ -121,3 +121,33 @@ bool Player::allShipsPlaced() const
     }
     return true;
 }
+
+bool Player::undoLastShipPlacement() {
+    if (ships.empty()) return false;
+
+    Ship last = ships.back();
+    ships.pop_back();
+
+    for (auto [x, y] : last.getCoordinates())
+        board.setCell(x, y, CellState::Empty);
+
+    int shipLength = static_cast<int>(last.getCoordinates().size());
+
+    for (auto& entry : shipPool)
+        if (entry.length == shipLength) {
+            entry.placed--;
+            break;
+        }
+
+    return true;
+}
+
+void Player::resetAllShips() {
+    for (auto& ship : ships)
+        for (auto [x, y] : ship.getCoordinates())
+            board.setCell(x, y, CellState::Empty);
+
+    ships.clear();
+    for (auto& entry : shipPool)
+        entry.placed = 0;
+}

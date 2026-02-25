@@ -88,3 +88,8 @@ void Board::print(std::ostream& out, bool showShips) const
         out << "\n";
     }
 }
+
+void Board::setCell(int x, int y, CellState state) {
+    if (x >= 0 && x < size && y >= 0 && y < size)
+        grid[y][x] = state;
+}

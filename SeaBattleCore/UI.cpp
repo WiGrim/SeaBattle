@@ -50,10 +50,26 @@ void printBoardsSideBySide(const Board& left, const Board& right, bool showShips
 
 void printSwitchScreen(const Player& player1, const Player& player2, const Player& currentPlayer, std::ostream& out)
 {
-    out << "Turn away and give control to another player\n\n";
-
     bool showLeft = (&currentPlayer == &player1);
     bool showRight = (&currentPlayer == &player2);
 
     printBoardsSideBySide(player1.board, player2.board, showLeft, showRight, out);
+}
+
+void showSwitchMessage(std::ostream& out)
+{
+    out << "Turn away and give control to another player\n";
+    out << "Press any key to continue...\n";
+    std::cin.get();
+}
+
+void showBoardsForSwitch(const Player& player1, const Player& player2, const Player& currentPlayer, std::ostream& out)
+{
+    bool showLeft = (&currentPlayer == &player1);
+    bool showRight = (&currentPlayer == &player2);
+
+    printBoardsSideBySide(player1.board, player2.board, showLeft, showRight, out);
+
+    out << "Press any key to continue...\n";
+    std::cin.get();
 }
