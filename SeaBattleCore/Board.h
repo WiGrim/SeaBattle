@@ -16,7 +16,7 @@ public:
     void validateCoordinates(int x, int y) const;
     CellState getCell(int x, int y) const;
     int getSize() const;
-    bool isGameOver() const;
+    //bool isGameOver() const;
 
 private:
     int size;

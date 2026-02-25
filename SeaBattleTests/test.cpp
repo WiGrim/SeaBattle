@@ -3,6 +3,7 @@
 #include "CellState.h"
 #include "ShipPlaceError.h"
 #include "Game.h"
+#include "UI.h"
 
 TEST(BoardTest, BoardCreation)
 {
@@ -384,17 +385,17 @@ TEST(UITest, InputPlayerNames) {
 }
 
 TEST(UITest, ShowNextPlayerBoardOnSwitchScreen) {
-    Player p1("Alice", 5);
-    Player p2("Bob", 5);
+    Player p1("Alice", 5, { 2 });
+    Player p2("Bob", 5, { 2 });
 
     p1.addShip(0, 0, 2, Orientation::Horizontal);
     p2.addShip(1, 1, 2, Orientation::Horizontal);
 
     std::ostringstream out;
-    printSwitchScreen(p2, out);
+    printSwitchScreen(p1, p2, p2, out);
 
     std::string output = out.str();
-    EXPECT_NE(output.find("Отвернитесь и передайте ход"), std::string::npos);
+    EXPECT_NE(output.find("Turn away and give control to another player"), std::string::npos);
     EXPECT_NE(output.find("0 1 2 3 4"), std::string::npos);
     EXPECT_NE(output.find("0 0 - - -"), std::string::npos);
 }
@@ -420,7 +421,6 @@ TEST(UITest, BothFieldsHiddenAtStartOfTurn) {
     Game game("Alice", "Bob", 5);
     game.player1.addShip(0, 0, 2, Orientation::Horizontal);
     game.player2.addShip(1, 1, 2, Orientation::Horizontal);
-    game.start();
 
     std::ostringstream out;
     printBoardsSideBySide(game.currentPlayer->board, game.opponent->board, false, false, out);
@@ -433,7 +433,6 @@ TEST(UITest, HitDoesNotSwitchPlayer) {
     Game game("Alice", "Bob", 3);
     game.player1.addShip(0, 0, 1, Orientation::Horizontal);
     game.player2.addShip(1, 1, 1, Orientation::Horizontal);
-    game.start();
 
     game.shootAtOpponent(1, 1);
     EXPECT_EQ(game.currentPlayer->name, "Alice");
@@ -443,7 +442,6 @@ TEST(UITest, MissSwitchesPlayer) {
     Game game("Alice", "Bob", 3);
     game.player1.addShip(0, 0, 1, Orientation::Horizontal);
     game.player2.addShip(1, 1, 1, Orientation::Horizontal);
-    game.start();
 
     game.shootAtOpponent(0, 2);
     EXPECT_EQ(game.currentPlayer->name, "Bob");
@@ -453,13 +451,12 @@ TEST(UITest, ShowNextPlayerFieldBeforeTurn) {
     Game game("Alice", "Bob", 3);
     game.player1.addShip(0, 0, 1, Orientation::Horizontal);
     game.player2.addShip(1, 1, 1, Orientation::Horizontal);
-    game.start();
 
     std::ostringstream out;
-    printSwitchScreen(game.currentPlayer, out);
+    printSwitchScreen(game.player1, game.player2, *game.currentPlayer, out);
 
     std::string output = out.str();
-    EXPECT_NE(output.find("Отвернитесь и передайте ход"), std::string::npos);
+    EXPECT_NE(output.find("Turn away and give control to another player"), std::string::npos);
     EXPECT_NE(output.find("0"), std::string::npos);
 }
 
@@ -479,7 +476,6 @@ TEST(UITest, GameOverScreenShowsWinner) {
     Game game("Alice", "Bob", 2);
     game.player1.addShip(0, 0, 1, Orientation::Horizontal);
     game.player2.addShip(1, 1, 1, Orientation::Horizontal);
-    game.start();
 
     game.shootAtOpponent(1, 1);
     EXPECT_TRUE(game.isGameOver());

@@ -16,7 +16,8 @@ void Game::shootAtOpponent(int x, int y)
     {
         for (auto& ship : opponent->getShips())
         {
-            ship.registerHit(x, y);
+            if (ship.registerHit(x, y))
+                break;
         }
         if (isGameOver()) {
             winnerName = currentPlayer->name;

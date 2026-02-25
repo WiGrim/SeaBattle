@@ -32,6 +32,11 @@ public:
         return shipPool;
     }
 
+    std::vector<ShipPool>& getShipPool()
+    {
+        return shipPool;
+    }
+
 private:
     std::vector<Ship> ships;
 
