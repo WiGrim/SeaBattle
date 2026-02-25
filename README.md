@@ -15,6 +15,7 @@ Features:
 
 - Interactive console interface
 - Undo the last placed ship and reset all placed ships
+- Internal game logic implemented following **Test-Driven Development (TDD)** methodology
 
 ## Documentation
 
@@ -49,6 +50,7 @@ MIT License
 
 - Интерактивный консольный интерфейс
 - Отмена установки корабля и сброс всех установленных кораблей
+- Внутренняя логика игры реализована согласно методологии **Test-Driven Development (TDD)**
 
 ## Documentation
 
