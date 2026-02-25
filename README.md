@@ -22,6 +22,7 @@ Features:
 - Board size: 10×10
 - Ships: lengths 4, 3, 2, 1 (multiple copies)
 - Ship placement: enter `x y` and orientation (`H` horizontal, `V` vertical, default is `H`)
+      **Note:** the coordinates `x y` indicate the **leftmost cell** for horizontal ships and the **topmost cell** for vertical ships.
 - Undo last ship: `U`
 - Reset all ships: `R`
 - Shoot: enter `x y` to attack the opponent’s board
@@ -57,6 +58,7 @@ MIT License
 - Размер доски: 10×10
 - Корабли: длины 4, 3, 2, 1 (несколько копий)
 - Размещение кораблей: ввод `x y` и ориентация (`H` горизонтально, `V` вертикально, по умолчанию `H`)
+      **Примечание:** координаты `x y` задают **самую левую клетку** для горизонтальных и **верхнюю клетку** для вертикальных кораблей.
 - Отмена последнего корабля: `U`
 - Сброс всех кораблей: `R`
 - Выстрел: ввод `x y` для атаки по доске противника
