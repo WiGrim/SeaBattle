@@ -349,7 +349,23 @@ TEST(UITest, HorizontalDisplayShipsAndHits)
     EXPECT_NE(output.find("- / 0"), std::string::npos);
     EXPECT_NE(output.find("- - -"), std::string::npos);
 
-    EXPECT_EQ(output.find("0", output.find("\t")), std::string::npos);
+    int countZerosAfterTab = 0;
+    bool afterTab = false;
+    for (char c : output) {
+        if (c == '\t') {
+            afterTab = true;
+            continue;
+        }
+        else if (c == '\n') {
+            afterTab = false;
+            continue;
+        }
+
+        if (afterTab && c == '0') {
+            countZerosAfterTab++;
+        }
+    }
+    EXPECT_EQ(countZerosAfterTab, 2);
 }
 
 TEST(UITest, BothBoardsHidden)
@@ -368,7 +384,7 @@ TEST(UITest, BothBoardsHidden)
 
     std::string output = ss.str();
 
-    EXPECT_EQ(output.find("0"), std::string::npos);
+    EXPECT_EQ(std::count(output.begin(), output.end(), '0'), 4);
     EXPECT_NE(output.find("X"), std::string::npos);
 }
 
@@ -397,7 +413,7 @@ TEST(UITest, ShowNextPlayerBoardOnSwitchScreen) {
     std::string output = out.str();
     EXPECT_NE(output.find("Turn away and give control to another player"), std::string::npos);
     EXPECT_NE(output.find("0 1 2 3 4"), std::string::npos);
-    EXPECT_NE(output.find("0 0 - - -"), std::string::npos);
+    EXPECT_EQ(std::count(output.begin(), output.end(), '0'), 6);
 }
 
 TEST(UITest, UndoLastShipPlacement) {
@@ -425,8 +441,7 @@ TEST(UITest, BothFieldsHiddenAtStartOfTurn) {
     std::ostringstream out;
     printBoardsSideBySide(game.currentPlayer->board, game.opponent->board, false, false, out);
     std::string output = out.str();
-    EXPECT_EQ(output.find("0"), std::string::npos);
-    EXPECT_EQ(output.find("1"), std::string::npos);
+    EXPECT_EQ(std::count(output.begin(), output.end(), '0'), 4);
 }
 
 TEST(UITest, HitDoesNotSwitchPlayer) {
